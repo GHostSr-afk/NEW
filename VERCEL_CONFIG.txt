@@ -1,0 +1,82 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                                                                  ║
+║          📋 VERCEL CONFIGURATION - COPY & PASTE                  ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+
+REPOSITORY TO IMPORT:
+═══════════════════════════════════════════════════════════════════
+GHostSr-afk/NEW
+https://github.com/GHostSr-afk/NEW
+
+
+PROJECT SETTINGS:
+═══════════════════════════════════════════════════════════════════
+
+Framework Preset: Other
+
+Build Command:
+npm run build:vercel
+
+Output Directory:
+client/build
+
+Install Command:
+npm install
+
+Root Directory:
+./
+
+
+ENVIRONMENT VARIABLES (Add 3 variables):
+═══════════════════════════════════════════════════════════════════
+
+Variable 1:
+  Name: JWT_SECRET
+  Value: smartcloset-super-secret-jwt-key-2025-change-in-production
+
+Variable 2:
+  Name: NODE_ENV
+  Value: production
+
+Variable 3 (Add after first deployment):
+  Name: REACT_APP_API_URL
+  Value: [YOUR VERCEL URL]/api
+  (Example: https://new-xyz123.vercel.app/api)
+
+
+DEPLOYMENT STEPS:
+═══════════════════════════════════════════════════════════════════
+
+1. ✅ Open Vercel new project page (should be open now)
+2. ⏳ Find and import: GHostSr-afk/NEW
+3. ⏳ Configure settings (see above)
+4. ⏳ Add environment variables
+5. ⏳ Click "Deploy"
+6. ⏳ Wait 2-3 minutes
+7. ⏳ Copy your Vercel URL
+8. ⏳ Add REACT_APP_API_URL environment variable
+9. ⏳ Redeploy
+10. ✅ Test your live app!
+
+
+═══════════════════════════════════════════════════════════════════
+
+⚠️ IMPORTANT NOTES:
+
+• Make sure to add ALL environment variables before deploying
+• After first deployment, add REACT_APP_API_URL with your actual URL
+• Click "Redeploy" after adding REACT_APP_API_URL
+
+═══════════════════════════════════════════════════════════════════
+
+🎯 YOUR APP FEATURES:
+
+✨ Beautiful landing page
+✨ Auto-login enabled
+✨ AI image analysis
+✨ Smart outfit recommendations
+✨ Digital wardrobe management
+✨ Mobile responsive
+
+═══════════════════════════════════════════════════════════════════
