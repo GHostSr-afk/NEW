@@ -92,7 +92,8 @@
 .card-image-container {
   position: relative;
   width: 100%;
-  padding-top: 120%; /* 5:6 aspect ratio */
+  padding-top: 120%;
+  /* 5:6 aspect ratio */
   background-color: var(--cream);
   overflow: hidden;
 }

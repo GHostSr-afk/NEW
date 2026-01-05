@@ -1,0 +1,257 @@
+/* Fashion Matrix Panel Styles */
+
+/* Season Selector */
+.season-selector {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.season-btn {
+  padding: 0.875rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: 2px solid #D4D0C8;
+  background: transparent;
+  color: #3D3D3D;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.season-btn:hover {
+  border-color: #A39B8B;
+  transform: translateY(-2px);
+}
+
+.season-btn.active {
+  background: linear-gradient(135deg, #3D3D3D 0%, #1A1A1A 100%);
+  color: #F5F5F0;
+  border-color: #1A1A1A;
+  box-shadow: 0 4px 12px rgba(26, 26, 26, 0.2);
+}
+
+/* Recommendations Grid */
+.recommendations-display {
+  animation: fadeIn 0.6s ease;
+}
+
+.recommendations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.recommendations-header h2 {
+  font-family: 'Crimson Pro', serif;
+  font-size: 2rem;
+  color: #1A1A1A;
+  margin: 0;
+}
+
+.btn-regenerate {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #F5F5F0;
+  border: 1.5px solid #D4D0C8;
+  border-radius: 8px;
+  color: #3D3D3D;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-regenerate:hover {
+  background: #E8E4DC;
+  border-color: #A39B8B;
+  transform: translateY(-1px);
+}
+
+.outfit-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+/* Individual Outfit Card */
+.fashion-matrix-outfit-card {
+  background: #FFFFFF;
+  border: 1.5px solid #E8E4DC;
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.fashion-matrix-outfit-card:hover {
+  border-color: #A39B8B;
+  box-shadow: 0 8px 24px rgba(61, 61, 61, 0.1);
+  transform: translateY(-4px);
+}
+
+.outfit-card-header {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #E8E4DC;
+}
+
+.outfit-card-title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.5rem;
+  color: #1A1A1A;
+  margin: 0 0 0.5rem 0;
+}
+
+.outfit-style-logic {
+  font-size: 0.875rem;
+  color: #A39B8B;
+  font-style: italic;
+}
+
+/* Outfit Reasoning */
+.outfit-reasoning {
+  background: #F5F5F0;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+}
+
+.outfit-reasoning p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #3D3D3D;
+}
+
+/* Mini Items Grid */
+.outfit-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.outfit-item-mini {
+  background: #F5F5F0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.outfit-item-mini:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(61, 61, 61, 0.1);
+}
+
+.mini-item-image {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #E8E4DC;
+}
+
+.mini-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mini-item-info {
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.mini-item-name {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1A1A1A;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mini-item-category {
+  font-size: 0.75rem;
+  color: #A39B8B;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Save Outfit Button */
+.btn-save-outfit {
+  width: 100%;
+  padding: 0.875rem;
+  background: linear-gradient(135deg, #3D3D3D 0%, #1A1A1A 100%);
+  color: #F5F5F0;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.btn-save-outfit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(26, 26, 26, 0.25);
+}
+
+.btn-save-outfit:active {
+  transform: translateY(0);
+}
+
+/* No Outfits Message */
+.no-outfits-message {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #F5F5F0;
+  border-radius: 12px;
+  color: #3D3D3D;
+}
+
+.no-outfits-message p {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .outfit-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .season-selector {
+    flex-direction: column;
+  }
+
+  .season-btn {
+    width: 100%;
+  }
+
+  .recommendations-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}

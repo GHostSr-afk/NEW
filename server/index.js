@@ -4,8 +4,7 @@ const path = require('path');
 const authRoutes = require('./routes/auth');
 const clothesRoutes = require('./routes/clothes');
 const outfitRoutes = require('./routes/outfit');
-const analysisRoutes = require('./routes/analysis');
-const { initDatabase } = require('./database/db');
+const { initDatabase, migrateDatabase } = require('./database/db');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,11 +27,11 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 initDatabase();
+migrateDatabase();
 
 app.use('/api/auth', authRoutes);
 app.use('/api/clothes', clothesRoutes);
 app.use('/api/outfit', outfitRoutes);
-app.use('/api/analysis', analysisRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });

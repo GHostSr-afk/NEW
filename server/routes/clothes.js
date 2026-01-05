@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const { getDb } = require('../database/db');
 const { verifyToken } = require('./auth');
+const FashionMatrixAgent = require('../services/fashionMatrixAgent');
 
 const router = express.Router();
 
@@ -32,49 +33,66 @@ const upload = multer({
 });
 
 // Upload a new clothing item
-router.post('/upload', verifyToken, upload.single('image'), (req, res) => {
+router.post('/upload', verifyToken, upload.single('image'), async (req, res) => {
   try {
-    console.log('Upload request received');
-    console.log('Body:', req.body);
-    console.log('File:', req.file);
-    console.log('User ID:', req.userId);
-    
     const { item_name, category, season } = req.body;
-    
+
     if (!req.file) {
-      console.log('Error: No file uploaded');
       return res.status(400).json({ error: 'Image is required' });
     }
-    
+
     if (!item_name || !category || !season) {
-      console.log('Error: Missing fields', { item_name, category, season });
       return res.status(400).json({ error: 'All fields are required' });
     }
 
     const db = getDb();
     const imagePath = `/uploads/${req.file.filename}`;
-    console.log('Saving to database:', { req_userId: req.userId, imagePath, item_name, category, season });
+    const fullImagePath = path.join(__dirname, '..', 'uploads', req.file.filename);
 
-    db.run(
-      'INSERT INTO clothes (user_id, image_path, item_name, category, season) VALUES (?, ?, ?, ?, ?)',
-      [req.userId, imagePath, item_name, category, season],
-      function(err) {
-        if (err) {
-          console.error('Database error:', err);
-          return res.status(500).json({ error: 'Database error' });
-        }
-        console.log('Item saved successfully:', this.lastID);
-        res.json({
-          id: this.lastID,
-          user_id: req.userId,
-          image_path: imagePath,
-          item_name,
-          category,
-          season
-        });
-        db.close();
+    // Analyze image with Fashion Matrix Agent
+    const agent = new FashionMatrixAgent();
+    let analysis = null;
+
+    try {
+      analysis = await agent.analyzeClothingImage(fullImagePath, item_name, category);
+    } catch (analysisError) {
+      console.error('Analysis error (non-fatal):', analysisError);
+    }
+
+    // Insert with analysis data if available
+    const query = analysis
+      ? `INSERT INTO clothes (user_id, image_path, item_name, category, season, color_hex, color_family, detected_type, formality, seasonality_score, analyzed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      : `INSERT INTO clothes (user_id, image_path, item_name, category, season) VALUES (?, ?, ?, ?, ?)`;
+
+    const params = analysis
+      ? [req.userId, imagePath, item_name, category, season, analysis.color_hex, analysis.color_family, analysis.detected_type, analysis.formality, analysis.seasonality_score, 1]
+      : [req.userId, imagePath, item_name, category, season];
+
+    db.run(query, params, function (err) {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).json({ error: 'Database error' });
       }
-    );
+
+      const response = {
+        id: this.lastID,
+        user_id: req.userId,
+        image_path: imagePath,
+        item_name,
+        category,
+        season
+      };
+
+      if (analysis) {
+        response.color_hex = analysis.color_hex;
+        response.color_family = analysis.color_family;
+        response.formality = analysis.formality;
+        response.seasonality_score = analysis.seasonality_score;
+      }
+
+      res.json(response);
+      db.close();
+    });
   } catch (error) {
     console.error('Server error:', error);
     res.status(500).json({ error: 'Server error' });
@@ -86,20 +104,20 @@ router.get('/', verifyToken, (req, res) => {
   try {
     const { category, season } = req.query;
     const db = getDb();
-    
+
     let query = 'SELECT * FROM clothes WHERE user_id = ?';
     const params = [req.userId];
-    
+
     if (category) {
       query += ' AND category = ?';
       params.push(category);
     }
-    
+
     if (season) {
       query += ' AND season = ?';
       params.push(season);
     }
-    
+
     query += ' ORDER BY created_at DESC';
 
     db.all(query, params, (err, rows) => {
@@ -142,11 +160,11 @@ router.patch('/:id/wear', verifyToken, (req, res) => {
   try {
     const db = getDb();
     const today = new Date().toISOString().split('T')[0];
-    
+
     db.run(
       'UPDATE clothes SET last_worn_date = ? WHERE id = ? AND user_id = ?',
       [today, req.params.id, req.userId],
-      function(err) {
+      function (err) {
         if (err) {
           return res.status(500).json({ error: 'Database error' });
         }
@@ -169,7 +187,7 @@ router.delete('/:id', verifyToken, (req, res) => {
     db.run(
       'DELETE FROM clothes WHERE id = ? AND user_id = ?',
       [req.params.id, req.userId],
-      function(err) {
+      function (err) {
         if (err) {
           return res.status(500).json({ error: 'Database error' });
         }
