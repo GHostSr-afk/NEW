@@ -12,16 +12,16 @@ const Navigation = () => {
   return (
     <nav className="navigation">
       <div className="nav-container">
-        <Link to="/" className="nav-logo">
+        <Link to="/app" className="nav-logo">
           <h1 className="logo-text">SmartCloset</h1>
         </Link>
         
         <div className="nav-links">
           <Link 
-            to="/" 
-            className={`nav-link ${isActive('/') ? 'active' : ''}`}
+            to="/app" 
+            className={`nav-link ${isActive('/app') ? 'active' : ''}`}
           >
-            Home
+            Overview
           </Link>
           <Link 
             to="/upload" 
@@ -44,7 +44,7 @@ const Navigation = () => {
         </div>
 
         <div className="nav-actions">
-          <span className="user-email">{user?.email}</span>
+          <span className="user-email">{user?.name || user?.email}</span>
           <button onClick={logout} className="btn-logout">
             Logout
           </button>

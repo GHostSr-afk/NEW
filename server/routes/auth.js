@@ -8,21 +8,21 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 
 router.post('/register', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Email and password are required' });
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: 'Name, email, and password are required' });
     }
     const db = getDb();
     const hashedPassword = await bcrypt.hash(password, 10);
-    db.run('INSERT INTO users (email, password) VALUES (?, ?)', [email, hashedPassword], function(err) {
+    db.run('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, hashedPassword], function(err) {
       if (err) {
         if (err.message.includes('UNIQUE constraint')) {
           return res.status(400).json({ error: 'Email already exists' });
         }
         return res.status(500).json({ error: 'Database error' });
       }
-      const token = jwt.sign({ userId: this.lastID, email }, JWT_SECRET, { expiresIn: '7d' });
-      res.json({ token, userId: this.lastID, email });
+      const token = jwt.sign({ userId: this.lastID, name, email }, JWT_SECRET, { expiresIn: '7d' });
+      res.json({ token, userId: this.lastID, name, email });
       db.close();
     });
   } catch (error) {
@@ -48,8 +48,8 @@ router.post('/login', async (req, res) => {
       if (!isValid) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
-      const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
-      res.json({ token, userId: user.id, email: user.email });
+      const token = jwt.sign({ userId: user.id, name: user.name, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+      res.json({ token, userId: user.id, name: user.name, email: user.email });
       db.close();
     });
   } catch (error) {
