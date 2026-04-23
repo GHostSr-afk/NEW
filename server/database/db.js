@@ -22,6 +22,7 @@ function initDatabase() {
   // Create tables
   db.run(`CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    name TEXT NOT NULL DEFAULT '',
     email TEXT UNIQUE NOT NULL, 
     password TEXT NOT NULL, 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -73,6 +74,7 @@ function migrateDatabase() {
 
     // Add new columns if they don't exist
     const newColumns = [
+      { name: 'name', type: "TEXT NOT NULL DEFAULT ''" },
       { name: 'color_hex', type: 'TEXT DEFAULT NULL' },
       { name: 'color_family', type: 'TEXT DEFAULT NULL' },
       { name: 'detected_type', type: 'TEXT DEFAULT NULL' },

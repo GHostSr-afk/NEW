@@ -16,59 +16,31 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Auto-login function
-    const autoLogin = async () => {
-      // Check if user is already logged in
-      const token = localStorage.getItem('token');
-      const userData = localStorage.getItem('user');
-      
-      if (token && userData) {
-        setUser(JSON.parse(userData));
-        setLoading(false);
-        return;
-      }
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
 
-      // Auto-login with demo account
-      try {
-        console.log('Auto-logging in with demo account...');
-        const data = await authService.login('demo@smartcloset.com', 'demo123');
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify({ email: data.email, userId: data.userId }));
-        setUser({ email: data.email, userId: data.userId });
-        console.log('✅ Auto-login successful!');
-      } catch (error) {
-        console.error('Auto-login failed:', error);
-        // If auto-login fails, try with test account
-        try {
-          console.log('Trying test account...');
-          const data = await authService.login('test@test.com', 'test123');
-          localStorage.setItem('token', data.token);
-          localStorage.setItem('user', JSON.stringify({ email: data.email, userId: data.userId }));
-          setUser({ email: data.email, userId: data.userId });
-          console.log('✅ Auto-login successful with test account!');
-        } catch (error2) {
-          console.error('Both auto-login attempts failed:', error2);
-        }
-      }
-      setLoading(false);
-    };
+    if (token && userData) {
+      setUser(JSON.parse(userData));
+    }
 
-    autoLogin();
+    setLoading(false);
   }, []);
 
   const login = async (email, password) => {
     const data = await authService.login(email, password);
+    const nextUser = { name: data.name, email: data.email, userId: data.userId };
     localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify({ email: data.email, userId: data.userId }));
-    setUser({ email: data.email, userId: data.userId });
+    localStorage.setItem('user', JSON.stringify(nextUser));
+    setUser(nextUser);
     return data;
   };
 
-  const register = async (email, password) => {
-    const data = await authService.register(email, password);
+  const register = async (userData) => {
+    const data = await authService.register(userData);
+    const nextUser = { name: data.name, email: data.email, userId: data.userId };
     localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify({ email: data.email, userId: data.userId }));
-    setUser({ email: data.email, userId: data.userId });
+    localStorage.setItem('user', JSON.stringify(nextUser));
+    setUser(nextUser);
     return data;
   };
 

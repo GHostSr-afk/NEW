@@ -3,21 +3,29 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './LoginPage.css';
 
-const LoginPage = () => {
+const SignupPage = () => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      await login(email, password);
+      await register({ name, email, password });
       navigate('/app');
     } catch (err) {
       setError(err.response?.data?.error || 'An error occurred. Please try again.');
@@ -31,19 +39,31 @@ const LoginPage = () => {
       <div className="login-container">
         <div className="login-header">
           <h1 className="login-title">SmartCloset</h1>
-          <p className="login-subtitle">Login to continue into your wardrobe workspace</p>
+          <p className="login-subtitle">Create your wardrobe workspace</p>
         </div>
 
         <div className="login-card">
           <div className="tab-switcher">
-            <span className="tab active">Login</span>
-            <Link className="tab" to="/register">
-              Sign Up
+            <Link className="tab" to="/login">
+              Login
             </Link>
+            <span className="tab active">Sign Up</span>
           </div>
 
           <form onSubmit={handleSubmit} className="login-form">
             {error && <div className="error-message">{error}</div>}
+
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your name"
+                required
+              />
+            </div>
 
             <div className="form-group">
               <label htmlFor="email">Email</label>
@@ -64,20 +84,33 @@ const LoginPage = () => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
+                placeholder="Create a password"
+                required
+                minLength="6"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Repeat your password"
                 required
                 minLength="6"
               />
             </div>
 
             <button type="submit" className="btn-submit" disabled={loading}>
-              {loading ? 'Please wait...' : 'Login'}
+              {loading ? 'Please wait...' : 'Create Account'}
             </button>
           </form>
 
           <div className="login-footer">
             <p>
-              Don&apos;t have an account? <Link className="link-button" to="/register">Create one</Link>
+              Already have an account? <Link className="link-button" to="/login">Login</Link>
             </p>
           </div>
         </div>
@@ -86,4 +119,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignupPage;
